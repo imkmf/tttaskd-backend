@@ -8,4 +8,9 @@ class TasksController < ApplicationController
     @tasks = Task.inbox
     render json: { tasks: @tasks }
   end
+
+  def flagged
+    @tasks = Task.flagged
+    render json: { tasks: @tasks }
+  end
 end

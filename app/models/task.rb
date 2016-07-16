@@ -22,5 +22,19 @@
 class Task < ApplicationRecord
   belongs_to :project, optional: true
   belongs_to :context, optional: true
+
   scope :inbox, -> { where(context: nil, project: nil) }
+  scope :flagged, -> { where(flagged: true) }
+
+  def overdue?
+    due_at < DateTime.now
+  end
+
+  def toggle_completion!
+    toggle :completed
+  end
+
+  def toggle_flag!
+    toggle :flagged
+  end
 end
