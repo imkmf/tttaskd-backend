@@ -5,6 +5,9 @@ gem 'sqlite3'
 gem 'puma', '~> 3.0'
 gem 'rack-cors'
 
+gem 'devise'
+gem 'jwt'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'pry-rails'
