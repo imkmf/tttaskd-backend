@@ -1,4 +1,6 @@
 class ContextsController < ApplicationController
+  before_filter :authenticate_request!
+
   def index
     @contexts = Context.all
     render json: { contexts: @contexts }

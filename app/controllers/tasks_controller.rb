@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  before_filter :authenticate_request!
+
   def index
     @tasks = Task.all
     render json: { tasks: @tasks }
