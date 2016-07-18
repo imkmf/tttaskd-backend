@@ -6,6 +6,19 @@ class TasksController < ApplicationController
     render json: { tasks: @tasks }
   end
 
+  def create
+    tp = task_params.to_h
+    tp[:user_id] = @current_user.id
+
+    @task = Task.new(tp)
+    if @task.valid?
+      @task.save!
+      render json: { task: @task }
+    else
+      render json: { errors: @task.errors }
+    end
+  end
+
   def update
     @task = Task.find(params[:id])
     if @task.user != @current_user
@@ -18,6 +31,13 @@ class TasksController < ApplicationController
 
   private
   def task_params
-    params.require(:task).permit(:completed, :flagged)
+    params.require(:task).permit(
+      :completed,
+      :context_id,
+      :due_at,
+      :flagged,
+      :name,
+      :project_id,
+    )
   end
 end
