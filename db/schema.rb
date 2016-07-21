@@ -12,12 +12,15 @@
 
 ActiveRecord::Schema.define(version: 20160717213312) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "contexts", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
-    t.index ["user_id"], name: "index_contexts_on_user_id"
+    t.index ["user_id"], name: "index_contexts_on_user_id", using: :btree
   end
 
   create_table "projects", force: :cascade do |t|
@@ -27,7 +30,7 @@ ActiveRecord::Schema.define(version: 20160717213312) do
     t.boolean  "completed",    default: false, null: false
     t.datetime "completed_at"
     t.integer  "user_id"
-    t.index ["user_id"], name: "index_projects_on_user_id"
+    t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -41,9 +44,9 @@ ActiveRecord::Schema.define(version: 20160717213312) do
     t.datetime "completed_at"
     t.boolean  "flagged",      default: false, null: false
     t.integer  "user_id"
-    t.index ["context_id"], name: "index_tasks_on_context_id"
-    t.index ["project_id"], name: "index_tasks_on_project_id"
-    t.index ["user_id"], name: "index_tasks_on_user_id"
+    t.index ["context_id"], name: "index_tasks_on_context_id", using: :btree
+    t.index ["project_id"], name: "index_tasks_on_project_id", using: :btree
+    t.index ["user_id"], name: "index_tasks_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -59,8 +62,13 @@ ActiveRecord::Schema.define(version: 20160717213312) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "contexts", "users"
+  add_foreign_key "projects", "users"
+  add_foreign_key "tasks", "contexts"
+  add_foreign_key "tasks", "projects"
+  add_foreign_key "tasks", "users"
 end

@@ -12,6 +12,10 @@
 #
 #  index_contexts_on_user_id  (user_id)
 #
+# Foreign Keys
+#
+#  fk_rails_6d2943ccf8  (user_id => users.id)
+#
 
 class Context < ApplicationRecord
   belongs_to :user

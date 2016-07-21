@@ -20,6 +20,12 @@
 #  index_tasks_on_project_id  (project_id)
 #  index_tasks_on_user_id     (user_id)
 #
+# Foreign Keys
+#
+#  fk_rails_02e851e3b7  (project_id => projects.id)
+#  fk_rails_4d2a9e4d7e  (user_id => users.id)
+#  fk_rails_6a2e669e50  (context_id => contexts.id)
+#
 
 class Task < ApplicationRecord
   belongs_to :project, optional: true
