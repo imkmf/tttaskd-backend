@@ -14,6 +14,6 @@ Rails.application.routes.draw do
   post '/auth_user' => 'authentication#authenticate_user'
   post '/auth/sign_up' => 'authentication#sign_up'
 
-  get 'home' => 'home#index'
+  root to: 'pages#root'
   get '/.well-known/acme-challenge/:id' => 'pages#letsencrypt'
 end
