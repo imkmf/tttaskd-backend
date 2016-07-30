@@ -37,6 +37,7 @@ class TasksController < ApplicationController
       :due_at,
       :flagged,
       :name,
+      :notes,
       :project_id,
     )
   end

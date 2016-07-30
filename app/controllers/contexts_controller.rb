@@ -42,6 +42,7 @@ class ContextsController < ApplicationController
   def context_params
     params.require(:context).permit(
       :name,
+      :notes,
     )
   end
 end

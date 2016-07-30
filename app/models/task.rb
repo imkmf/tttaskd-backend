@@ -13,6 +13,7 @@
 #  completed_at :datetime
 #  flagged      :boolean          default(FALSE), not null
 #  user_id      :integer
+#  notes        :text
 #
 # Indexes
 #

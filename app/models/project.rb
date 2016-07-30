@@ -9,6 +9,7 @@
 #  completed    :boolean          default(FALSE), not null
 #  completed_at :datetime
 #  user_id      :integer
+#  notes        :text
 #
 # Indexes
 #
