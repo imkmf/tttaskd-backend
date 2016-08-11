@@ -87,10 +87,7 @@ class Task < ApplicationRecord
   end
 
   def save
-    if completed_changed?(from: false, to: true)
-      create_next_in_recurring!
-    end
-
+    create_next_in_recurring!  if completed_changed?(from: false, to: true)
     super
   end
 end
