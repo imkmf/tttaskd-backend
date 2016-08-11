@@ -1,27 +1,34 @@
 task:
   name: 'Take out the garbage'
+  user: user
 
 task_with_overdue_due_date:
   name: 'Take out the garbage'
   due_at: <%= DateTime.now - 2.days %>
+  user: user
 
 task_with_due_date:
   name: 'Take out the garbage'
   due_at: <%= DateTime.now + 7.days %>
+  user: user
 
 task_with_context:
   name: 'Take out the garbage'
   context: context
+  user: user
 
 task_with_project:
   name: 'Take out the garbage'
   project: project
+  user: user
 
 task_completed:
   name: 'Take out the garbage'
   completed: true
+  user: user
 
 task_flagged:
   name: 'Take out the garbage'
   flagged: true
+  user: user
 

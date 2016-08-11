@@ -2,18 +2,19 @@
 #
 # Table name: tasks
 #
-#  id           :integer          not null, primary key
-#  name         :string
-#  due_at       :datetime
-#  project_id   :integer
-#  context_id   :integer
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  completed    :boolean          default(FALSE), not null
-#  completed_at :datetime
-#  flagged      :boolean          default(FALSE), not null
-#  user_id      :integer
-#  notes        :text
+#  id                 :integer          not null, primary key
+#  name               :string
+#  due_at             :datetime
+#  project_id         :integer
+#  context_id         :integer
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  completed          :boolean          default(FALSE), not null
+#  completed_at       :datetime
+#  flagged            :boolean          default(FALSE), not null
+#  user_id            :integer
+#  notes              :text
+#  recurring_interval :string
 #
 # Indexes
 #
@@ -29,12 +30,16 @@
 #
 
 class Task < ApplicationRecord
+  include ActiveModel::Dirty
+
   belongs_to :project, optional: true
   belongs_to :context, optional: true
   belongs_to :user
 
   scope :inbox, -> { where(context: nil, project: nil) }
   scope :flagged, -> { where(flagged: true) }
+
+  validates_inclusion_of :recurring_interval, in: %w( daily weekly monthly )
 
   def overdue?
     due_at < DateTime.now
@@ -46,5 +51,41 @@ class Task < ApplicationRecord
 
   def toggle_flag!
     toggle :flagged
+  end
+
+  def recurring_interval_as_date
+    case recurring_interval
+    when "daily"
+      1.day
+    when "weekly"
+      1.week
+    when "monthly"
+      1.month
+    else
+      nil
+    end
+  end
+
+  def create_next_in_recurring!
+    return unless recurring_interval
+    new_due_at = due_at + recurring_interval_as_date
+
+    Task.create(
+      name: name,
+      due_at: new_due_at,
+      project: project,
+      context: context,
+      user: user,
+      notes: notes,
+      recurring_interval: recurring_interval,
+    )
+  end
+
+  def save
+    if completed_changed?(from: false, to: true)
+      create_next_in_recurring!
+    end
+
+    super
   end
 end

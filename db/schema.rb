@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160730191358) do
+ActiveRecord::Schema.define(version: 20160811180838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,13 +40,14 @@ ActiveRecord::Schema.define(version: 20160730191358) do
     t.datetime "due_at"
     t.integer  "project_id"
     t.integer  "context_id"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.boolean  "completed",    default: false, null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.boolean  "completed",          default: false, null: false
     t.datetime "completed_at"
-    t.boolean  "flagged",      default: false, null: false
+    t.boolean  "flagged",            default: false, null: false
     t.integer  "user_id"
     t.text     "notes"
+    t.string   "recurring_interval"
     t.index ["context_id"], name: "index_tasks_on_context_id", using: :btree
     t.index ["project_id"], name: "index_tasks_on_project_id", using: :btree
     t.index ["user_id"], name: "index_tasks_on_user_id", using: :btree

@@ -1,15 +1,6 @@
 require 'test_helper'
 
 class TaskTest < ActiveSupport::TestCase
-  test "it can find inbox tasks" do
-    dont_find_this = Task.create(name: 'Test2', project: projects(:project))
-    find_this = Task.create(name: 'Test')
-
-    inbox_tasks = Task.inbox
-    assert inbox_tasks.include?(find_this)
-    assert_not inbox_tasks.include?(dont_find_this)
-  end
-
   test "it can be overdue" do
     task = tasks(:task_with_overdue_due_date)
     assert task.overdue?
@@ -25,5 +16,17 @@ class TaskTest < ActiveSupport::TestCase
     task = tasks(:task)
     task.toggle_flag!
     assert task.flagged
+  end
+
+  test "it can recur" do
+    task = tasks(:task_with_due_date)
+    task.recurring_interval = 'daily'
+    task.completed = true
+    task.save
+
+    new_task = Task.last
+
+    assert_equal task.name, new_task.name
+    assert_equal (task.due_at + 1.day), new_task.due_at
   end
 end

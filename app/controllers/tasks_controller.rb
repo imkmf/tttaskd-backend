@@ -39,6 +39,7 @@ class TasksController < ApplicationController
       :name,
       :notes,
       :project_id,
+      :recurring_interval,
     )
   end
 end
