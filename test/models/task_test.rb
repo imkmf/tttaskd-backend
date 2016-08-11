@@ -28,5 +28,6 @@ class TaskTest < ActiveSupport::TestCase
 
     assert_equal task.name, new_task.name
     assert_equal (task.due_at + 1.day), new_task.due_at
+    assert_equal task.next_task, new_task
   end
 end

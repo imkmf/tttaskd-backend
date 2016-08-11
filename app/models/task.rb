@@ -15,12 +15,14 @@
 #  user_id            :integer
 #  notes              :text
 #  recurring_interval :string
+#  next_task_id       :integer
 #
 # Indexes
 #
-#  index_tasks_on_context_id  (context_id)
-#  index_tasks_on_project_id  (project_id)
-#  index_tasks_on_user_id     (user_id)
+#  index_tasks_on_context_id    (context_id)
+#  index_tasks_on_next_task_id  (next_task_id)
+#  index_tasks_on_project_id    (project_id)
+#  index_tasks_on_user_id       (user_id)
 #
 # Foreign Keys
 #
@@ -35,6 +37,7 @@ class Task < ApplicationRecord
   belongs_to :project, optional: true
   belongs_to :context, optional: true
   belongs_to :user
+  has_one :next_task, class_name: 'Task', foreign_key: 'next_task_id'
 
   scope :inbox, -> { where(context: nil, project: nil) }
   scope :flagged, -> { where(flagged: true) }
@@ -70,7 +73,7 @@ class Task < ApplicationRecord
     return unless recurring_interval
     new_due_at = due_at + recurring_interval_as_date
 
-    Task.create(
+    new_task = Task.create(
       name: name,
       due_at: new_due_at,
       project: project,
@@ -79,6 +82,8 @@ class Task < ApplicationRecord
       notes: notes,
       recurring_interval: recurring_interval,
     )
+
+    self.next_task = new_task
   end
 
   def save
