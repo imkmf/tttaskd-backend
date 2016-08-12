@@ -39,10 +39,13 @@ class Task < ApplicationRecord
   belongs_to :user
   has_one :next_task, class_name: 'Task', foreign_key: 'next_task_id'
 
+  before_update :begin_creating_recurring
+  before_save :begin_creating_recurring
+
   scope :inbox, -> { where(context: nil, project: nil) }
   scope :flagged, -> { where(flagged: true) }
 
-  validates_inclusion_of :recurring_interval, in: %w( daily weekly monthly )
+  validates_inclusion_of :recurring_interval, in: %w( daily weekly monthly ), allow_nil: false
 
   def overdue?
     due_at < DateTime.now
@@ -70,8 +73,8 @@ class Task < ApplicationRecord
   end
 
   def create_next_in_recurring!
-    return unless recurring_interval
-    new_due_at = due_at + recurring_interval_as_date
+    return unless self.recurring_interval
+    new_due_at = due_at ? due_at + recurring_interval_as_date : nil
 
     new_task = Task.create(
       name: name,
@@ -86,8 +89,12 @@ class Task < ApplicationRecord
     self.next_task = new_task
   end
 
-  def save
-    create_next_in_recurring!  if completed_changed?(from: false, to: true)
-    super
+  def begin_creating_recurring
+    create_next_in_recurring! if completed_changed?(from: false, to: true)
+  end
+
+  def as_json(options = nil)
+    json = super(options)
+    json.merge("next_task" => next_task)
   end
 end
