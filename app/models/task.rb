@@ -39,9 +39,6 @@ class Task < ApplicationRecord
   belongs_to :user
   has_one :next_task, class_name: 'Task', foreign_key: 'next_task_id'
 
-  before_update :begin_creating_recurring
-  before_save :begin_creating_recurring
-
   scope :inbox, -> { where(context: nil, project: nil) }
   scope :flagged, -> { where(flagged: true) }
 
@@ -72,29 +69,8 @@ class Task < ApplicationRecord
     end
   end
 
-  def create_next_in_recurring!
-    return unless self.recurring_interval
-    new_due_at = due_at ? due_at + recurring_interval_as_date : nil
-
-    new_task = Task.create(
-      name: name,
-      due_at: new_due_at,
-      project: project,
-      context: context,
-      user: user,
-      notes: notes,
-      recurring_interval: recurring_interval,
-    )
-
-    self.next_task = new_task
-  end
-
-  def begin_creating_recurring
-    create_next_in_recurring! if completed_changed?(from: false, to: true)
-  end
-
   def as_json(options = nil)
-    json = super(options)
-    json.merge("next_task" => next_task)
+    body = super(options)
+    body.merge("next_task" => next_task)
   end
 end
