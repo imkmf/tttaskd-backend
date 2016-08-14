@@ -42,7 +42,7 @@ class Task < ApplicationRecord
   scope :inbox, -> { where(context: nil, project: nil) }
   scope :flagged, -> { where(flagged: true) }
 
-  validates_inclusion_of :recurring_interval, in: %w( daily weekly monthly ), allow_nil: false
+  validates_inclusion_of :recurring_interval, in: %w( daily weekly monthly ), allow_nil: true
 
   def overdue?
     due_at < DateTime.now
