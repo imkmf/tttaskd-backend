@@ -1,24 +1,7 @@
-# README
+# tttaskd-backend
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+tttaskd-backend is a Rails application that serves as the backend for [tttaskd](https://github.com/imkmf/tttaskd), a React/Redux GTD application.
 
-Things you may want to cover:
+This app is pretty basic, but has some interesting bits for authenticating with JWT - you could probably re-use the code for things like a mobile or frontend application.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+[tttaskd-backend is MIT-licensed](https://opensource.org/licenses/MIT)
